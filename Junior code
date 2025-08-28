@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 	// automated grader on Coursera
 	char input[MAX_LENGTH];
 	fgets(input, MAX_LENGTH, stdin);
-	while (input[0] != 'q')
+	while (!(input[0] == 'q' && (input[1] == '\n' || input[1] == '\0')))
 	{
 		// --- NEW FIX: Remove trailing newline from fgets ---
 		// fgets includes the newline character, which can cause issues.
@@ -34,15 +34,16 @@ int main(int argc, char** argv)
 		int letterCounts[26] = {0};
 
 		// Loop through the input string to count characters
-		for (int i = 0; i < strlen(input); i++)
+		int inputLength = (int)strlen(input);
+		for (int i = 0; i < inputLength; i++)
 		{
 			char currentChar = input[i];
 
 			// Check if the character is an alphabetic letter
-			if (isalpha(currentChar))
+			if (isalpha((unsigned char)currentChar))
 			{
 				// Convert the character to uppercase to treat 'a' and 'A' the same
-				char upperChar = toupper(currentChar);
+				char upperChar = (char)toupper((unsigned char)currentChar);
 
 				// Calculate the index for the letter (A=0, B=1, etc.)
 				int index = upperChar - 'A';
