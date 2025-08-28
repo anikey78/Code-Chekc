@@ -34,7 +34,8 @@ int main(int argc, char** argv)
 		int letterCounts[26] = {0};
 
 		// Loop through the input string to count characters
-		for (int i = 0; input[i] != '\0'; i++)
+		int inputLength = strlen(input);
+		for (int i = 0; i < inputLength; i++)
 		{
 			char currentChar = input[i];
 
