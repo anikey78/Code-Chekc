@@ -1,0 +1,81 @@
+/*
+ * File:   main.c
+ * Author: <Aniket Sharma>
+ */
+
+#define _CRT_SECURE_NO_WARNINGS
+ 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define MAX_LENGTH 100
+
+/*
+ * Junior Codebreaker Programming Assignment
+ */
+int main(int argc, char** argv)
+{
+	// IMPORTANT: Only add code in the section
+	// indicated below. The code I've provided
+	// makes your solution work with the 
+	// automated grader on Coursera
+	char input[MAX_LENGTH];
+	while (fgets(input, MAX_LENGTH, stdin) && input[0] != 'q')
+	{
+		// --- NEW FIX: Remove trailing newline from fgets ---
+		// fgets includes the newline character, which can cause issues.
+		// This line finds the newline and replaces it with a null terminator.
+		input[strcspn(input, "\n")] = '\0';
+
+		// Array to store the count of each letter (A-Z)
+		int letterCounts[26] = {0};
+
+		// Loop through the input string to count characters
+		int inputLength = strlen(input);
+		for (int i = 0; i < inputLength; i++)
+		{
+			char currentChar = input[i];
+
+			// Check if the character is an alphabetic letter
+			if (isalpha(currentChar))
+			{
+				// Convert the character to uppercase to treat 'a' and 'A' the same
+				char upperChar = toupper(currentChar);
+
+				// Calculate the index for the letter (A=0, B=1, etc.)
+				int index = upperChar - 'A';
+
+				// Increment the count for that letter
+				letterCounts[index]++;
+			}
+		}
+
+		// --- FIXED PRINTING LOGIC TO MATCH GRADER ---
+		// The grader expects output like "A3 B2 Z1" with NO space after the last item.
+		int isFirstOutput = 1; 
+		for (int i = 0; i < 26; i++)
+		{
+			if (letterCounts[i] > 0)
+			{
+				if (!isFirstOutput)
+				{
+					printf(" ");
+				}
+				
+				char letter = 'A' + i;
+				printf("%c%d", letter, letterCounts[i]);
+				
+				isFirstOutput = 0;
+			}
+		}
+		printf("\n");
+
+
+		// Don't add or modify any code below
+		// this comment
+	}
+
+	return 0;
+}
