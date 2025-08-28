@@ -25,24 +25,30 @@ int main(int argc, char** argv)
 	fgets(input, MAX_LENGTH, stdin);
 	while (input[0] != 'q')
 	{
-		// --- NEW FIX: Remove trailing newline from fgets ---
-		// fgets includes the newline character, which can cause issues.
-		// This line finds the newline and replaces it with a null terminator.
-		input[strcspn(input, "\n")] = '\0';
+		// --- Trim trailing newline, if any ---
+		size_t effectiveLength = strcspn(input, "\n");
+		input[effectiveLength] = '\0';
+
+		// Exit if the line is exactly a single 'q' or 'Q'
+		if ((input[0] == 'q' || input[0] == 'Q') && input[1] == '\0')
+		{
+			break;
+		}
 
 		// Array to store the count of each letter (A-Z)
 		int letterCounts[26] = {0};
+		// Track letters only by counts
 
 		// Loop through the input string to count characters
-		for (int i = 0; i < strlen(input); i++)
+		for (size_t i = 0; i < effectiveLength; i++)
 		{
-			char currentChar = input[i];
+			unsigned char currentChar = (unsigned char)input[i];
 
 			// Check if the character is an alphabetic letter
 			if (isalpha(currentChar))
 			{
 				// Convert the character to uppercase to treat 'a' and 'A' the same
-				char upperChar = toupper(currentChar);
+				unsigned char upperChar = (unsigned char)toupper(currentChar);
 
 				// Calculate the index for the letter (A=0, B=1, etc.)
 				int index = upperChar - 'A';
@@ -52,8 +58,7 @@ int main(int argc, char** argv)
 			}
 		}
 
-		// --- FIXED PRINTING LOGIC TO MATCH GRADER ---
-		// The grader expects output like "A3 B2 Z1" with NO space after the last item.
+		// Print results in alphabetical order with single spaces between items
 		int isFirstOutput = 1; 
 		for (int i = 0; i < 26; i++)
 		{
@@ -63,10 +68,8 @@ int main(int argc, char** argv)
 				{
 					printf(" ");
 				}
-				
 				char letter = 'A' + i;
 				printf("%c%d", letter, letterCounts[i]);
-				
 				isFirstOutput = 0;
 			}
 		}
